@@ -1,10 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import connectDb from './dbConnect.js'
+import connectDb from './config/dbConnect.js'
 
 
 const app = express()
-
 connectDb()
 
 app.use(cors())

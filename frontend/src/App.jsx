@@ -10,11 +10,13 @@ function App() {
 
     <Routes>
       <Route element={<Layout />}>
+
         <Route path="/" element={<Navigate to="/products" />} />
 
         <Route path="/products" element={<Products />} />
         <Route path="/categories" element={<Categories />} />
       </Route>
+
     </Routes>
   );
 }
