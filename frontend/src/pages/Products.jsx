@@ -1,21 +1,51 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import axios from 'axios'
 function Products() {
   const [showForm, setShowForm] = useState(false);
+
+
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [products, setProducts] = useState([
-    { id: 1, name: "Product 1", price: 10 },
-    { id: 2, name: "Product 2", price: 20 },
-    { id: 3, name: "Product 3", price: 30 },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [update, setUpdate] = useState('')
 
+  const getProducts = async () => {
+    const { data } = await axios.get('http://localhost:4000/products')
+    setProducts(data)
+  }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
+    if (update) {
+      const { data } = await axios.post('http://localhost:4000/updateProducts', { name, price, _id: update._id })
+    } else {
+      const { data } = await axios.post('http://localhost:4000/products', { name, price })
+    }
 
+    getProducts()
     setShowForm(false);
   };
+
+
+
+
+  const handleEdit = (data) => {
+    setUpdate(data)
+    setName(data.name)
+    setPrice(data.price)
+    setShowForm(true)
+  }
+
+
+  const handleDelete = async (id) => {
+    const { data } = await axios.post('http://localhost:4000/deleteProduct', { id })
+    getProducts()
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   return (
     <div>
@@ -37,13 +67,15 @@ function Products() {
             type="text"
             name="name"
             placeholder="Name"
-
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
             className="border rounded px-3 py-2"
           />
           <input
             type="number"
             name="price"
+            value={price}
             placeholder="Price"
             onChange={(e) => setPrice(e.target.value)}
             required
@@ -54,7 +86,7 @@ function Products() {
             onClick={handleSubmit}
             className="bg-gray-900 text-white px-4 py-2 rounded"
           >
-            Save
+            {update ? 'Update' : 'Save'}
           </button>
         </div>
       )}
@@ -65,15 +97,21 @@ function Products() {
             <th className="p-3">#</th>
             <th className="p-3">Name</th>
             <th className="p-3">Price</th>
-            <th className="p-3">Category</th>
+            {/* <th className="p-3">Category</th> */}
+            <th className="p-3">Actions</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product, index) => (
-            <tr key={product.id} className="border-t">
+            <tr key={product._id} className="border-t">
               <td className="p-3">{index + 1}</td>
               <td className="p-3">{product.name}</td>
               <td className="p-3">{product.price}</td>
+              <td className="p-3">
+                <span className="mr-6" onClick={() => handleEdit(product)}>Edit</span>
+                <span onClick={() => handleDelete(product._id)}>Delete</span>
+              </td>
+
             </tr>
           ))}
         </tbody>
