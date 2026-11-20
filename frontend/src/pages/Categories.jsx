@@ -1,19 +1,49 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function Categories() {
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Category 1" },
-    { id: 2, name: "Category 2" },
-    { id: 3, name: "Category 3" },
-  ]);
-  const handleSubmit = () => {
+  const [categories, setCategories] = useState([]);
+  const [update, setUpdate] = useState('')
+
+  const getCategories = async () => {
+    const { data } = await axios.get('http://localhost:4000/categories')
+    setCategories(data)
+  }
 
 
-    setName("");
+  const handleSubmit = async () => {
+
+    if (update) {
+      const { data } = await axios.post('http://localhost:4000/updateCategory', { name, _id: update._id })
+    } else {
+      const { data } = await axios.post('http://localhost:4000/categories', { name })
+    }
+
+    getCategories()
     setShowForm(false);
   };
+
+
+
+
+
+  const handleEdit = (data) => {
+    setUpdate(data)
+    setName(data.name)
+    setShowForm(true)
+  }
+
+
+  const handleDelete = async (id) => {
+    const { data } = await axios.post('http://localhost:4000/deleteCategory', { id })
+    getCategories()
+  }
+
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   return (
     <div>
@@ -54,13 +84,18 @@ function Categories() {
           <tr>
             <th className="p-3">#</th>
             <th className="p-3">Name</th>
+            <th className="p-3">actions</th>
           </tr>
         </thead>
         <tbody>
           {categories.map((category, index) => (
-            <tr key={category.id} className="border-t">
+            <tr key={category._id} className="border-t">
               <td className="p-3">{index + 1}</td>
               <td className="p-3">{category.name}</td>
+              <td className="p-3">
+                <span className="mr-6" onClick={() => handleEdit(category)}>Edit</span>
+                <span onClick={() => handleDelete(category._id)}>Delete</span>
+              </td>
             </tr>
           ))}
         </tbody>
