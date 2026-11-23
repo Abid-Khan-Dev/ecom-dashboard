@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
     name: String,
     price: Number,
-    categoryId: String
+    categoryId: mongoose.Schema.Types.ObjectId
 });
 
 const Product = mongoose.model('product', productSchema);
