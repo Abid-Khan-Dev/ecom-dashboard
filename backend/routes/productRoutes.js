@@ -27,7 +27,7 @@ router.post('/deleteProduct', async (req, res) => {
 
 router.get('/products', async (req, res) => {
 
-    const products = await Product.find()
+    const products = await Product.find().populate('categoryId')
     return res.json(products)
 })
 

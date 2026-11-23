@@ -130,7 +130,7 @@ function Products() {
               <td className="p-3">{index + 1}</td>
               <td className="p-3">{product.name}</td>
               <td className="p-3">{product.price}</td>
-              <td className="p-3">{product.categoryId}</td>
+              <td className="p-3">{product.categoryId.name}</td>
 
               <td className="p-3">
                 <span className="mr-6" onClick={() => handleEdit(product)}>Edit</span>
