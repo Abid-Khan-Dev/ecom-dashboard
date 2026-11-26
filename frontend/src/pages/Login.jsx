@@ -10,7 +10,9 @@ function Login() {
 
     const handleSubmit = async () => {
         try {
-            const res = await axios.post('http://localhost:4000/login', { email, password });
+            const res = await axios.post('http://localhost:4000/login', { email, password }, {
+                withCredentials: true
+            });
             console.log(res);
             if (res.status === 200) {
                 navigate('/products')

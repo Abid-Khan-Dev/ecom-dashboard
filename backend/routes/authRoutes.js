@@ -1,11 +1,11 @@
 import express from 'express'
 import Product from '../models/Product.js'
 import User from '../models/User.js'
-
+import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 
-
+const mykeyPassword = 'key@1234'
 
 router.post('/signup', async (req, res) => {
     try {
@@ -43,9 +43,16 @@ router.post('/login', async (req, res) => {
         }
 
         if (existingUser.password !== password) {
-            return res.status(404).json({ msg: 'Password in not correct' })
+            return res.status(400).json({ msg: 'Password is not correct' })
         }
 
+        const token = jwt.sign({ userId: existingUser._id }, mykeyPassword)
+        console.log(token);
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'strict'
+
+        })
         return res.status(200).json({ msg: "Successful." })
 
     } catch (error) {
