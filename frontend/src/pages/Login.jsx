@@ -24,8 +24,6 @@ function Login() {
             console.log(error);
 
         }
-
-
     }
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -58,6 +56,7 @@ function Login() {
                 >
                     Login
                 </button>
+                <p>Don't have an account? <Link to='/signup'>Signup</Link></p>
             </div>
         </div>
     )

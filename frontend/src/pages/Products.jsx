@@ -16,12 +16,12 @@ function Products() {
 
 
   const getProducts = async () => {
-    const { data } = await axios.get('http://localhost:4000/products')
+    const { data } = await axios.get('http://localhost:4000/products', { withCredentials: true })
     setProducts(data)
   }
 
   const getCategoriesFromBackend = async () => {
-    const { data } = await axios.get('http://localhost:4000/categories')
+    const { data } = await axios.get('http://localhost:4000/categories', { withCredentials: true })
     setGetCategories(data)
   }
 

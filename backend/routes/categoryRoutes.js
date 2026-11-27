@@ -1,5 +1,6 @@
 import express from "express"
 import Category from "../models/Category.js"
+import checktoken from "../middlewares/checkToken.js"
 
 const router = express.Router()
 
@@ -24,7 +25,7 @@ router.post('/deleteCategory', async (req, res) => {
 })
 
 
-router.get('/categories', async (req, res) => {
+router.get('/categories', checktoken, async (req, res) => {
     try {
         const category = await Category.find()
         return res.status(200).json(category)

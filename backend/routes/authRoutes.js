@@ -48,10 +48,9 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign({ userId: existingUser._id }, mykeyPassword)
         console.log(token);
-        res.cookie('token', token, {
+        res.cookie('jwtToken', token, {
             httpOnly: true,
             sameSite: 'strict'
-
         })
         return res.status(200).json({ msg: "Successful." })
 

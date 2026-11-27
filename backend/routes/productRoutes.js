@@ -1,5 +1,6 @@
 import express from 'express'
 import Product from '../models/Product.js'
+import checktoken from '../middlewares/checkToken.js'
 
 
 const router = express.Router()
@@ -25,7 +26,8 @@ router.post('/deleteProduct', async (req, res) => {
 })
 
 
-router.get('/products', async (req, res) => {
+router.get('/products', checktoken, async (req, res) => {
+    console.log(req.user, 'from get products');
 
     const products = await Product.find().populate('categoryId')
     return res.status(200).json(products)
